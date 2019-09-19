@@ -47,8 +47,7 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa',
-    'vue-sweetalert2/nuxt'
+    '@nuxtjs/pwa'
   ],
   /*
    ** Axios module configuration
