@@ -9,10 +9,12 @@ export const state = () => ({
 })
 
 export const actions = {
-  bindTransaction: firestoreAction(async ({ bindFirestoreRef }) => {
+  bindTransaction: firestoreAction(async ({ bindFirestoreRef }, limit) => {
     await bindFirestoreRef(
       'transaction',
-      transactionRef.orderBy('date', 'desc').limit(5)
+      limit
+        ? transactionRef.orderBy('date', 'desc').limit(limit)
+        : transactionRef.orderBy('date', 'desc')
     )
   })
 }
