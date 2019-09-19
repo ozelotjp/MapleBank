@@ -32,7 +32,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/components'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -47,7 +47,8 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    'vue-sweetalert2/nuxt'
   ],
   /*
    ** Axios module configuration
