@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     getFormatedDate(date) {
-      return date.toDate()
+      //
     }
   }
 }
