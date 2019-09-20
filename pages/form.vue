@@ -1,5 +1,5 @@
 <template lang="pug">
-  MemberOnly
+  v-content
     v-container
       v-row
         v-col(cols="12")
@@ -56,6 +56,11 @@ export default {
       transactionsRef: 'transactions/transactionsRef',
       bankRef: 'bank/bankRef'
     })
+  },
+  fetch({ store, redirect }) {
+    if (!store.getters['auth/status']) {
+      return redirect('/')
+    }
   },
   methods: {
     select(title, price) {

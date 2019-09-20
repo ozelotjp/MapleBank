@@ -4,7 +4,7 @@ import firestore from '~/plugins/firestore'
 const transactionsRef = firestore.collection('transactions')
 
 export const state = () => ({
-  transactions: []
+  transactions: null
 })
 
 export const actions = {

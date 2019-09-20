@@ -1,6 +1,6 @@
 <template lang="pug">
-  v-container
-    v-alert(type="info") しばらくお待ち下さい
+  v-content
+    Loading
 </template>
 
 <script>

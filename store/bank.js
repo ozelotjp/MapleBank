@@ -4,7 +4,7 @@ import firestore from '~/plugins/firestore'
 const bankRef = firestore.collection('bank').doc('maple')
 
 export const state = () => ({
-  bank: []
+  bank: null
 })
 
 export const actions = {

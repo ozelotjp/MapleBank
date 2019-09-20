@@ -1,45 +1,29 @@
 <template lang="pug">
-  MemberOnly
-    v-container
+  v-content
+    v-container(v-if="transactions && bank")
       v-alert(:type="bank.point >= 0 ? 'info' : 'error'") 現在の残高は {{ bank.point }}円 です
-      v-data-table(:headers="headers" :items="getFormatedTransactions" hide-default-footer)
+      v-data-table(:headers="headers" :items="getFormatedTransactions" hide-default-footer disable-sort)
         template(v-slot:no-data)
           div データを読込中です
         template(v-slot:footer v-if="showAllBtn")
           v-container
             v-btn(small @click="showAll()") 全件表示させる場合はここをクリック
+    Loading(v-else)
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 
-function getAgo(date) {
-  const diff = new Date().getTime() - date.getTime()
-  const d = new Date(diff)
-
-  if (d.getUTCFullYear() - 1970) {
-    return d.getUTCFullYear() - 1970 + '年前'
-  } else if (d.getUTCMonth()) {
-    return d.getUTCMonth() + 'ヶ月前'
-  } else if (d.getUTCDate() - 1) {
-    return d.getUTCDate() - 1 + '日前'
-  } else if (d.getUTCHours()) {
-    return d.getUTCHours() + '時間前'
-  } else if (d.getUTCMinutes()) {
-    return d.getUTCMinutes() + '分前'
-  } else {
-    return d.getUTCSeconds() + '秒前'
-  }
-}
-
 export default {
   data: () => ({
     headers: [
       { text: '日付', value: 'date' },
-      { text: '内容', value: 'title' },
-      { text: '価格', value: 'price' }
+      { text: '支払い', value: 'price_m' },
+      { text: '預かり', value: 'price_p' },
+      { text: '取引内容', value: 'title' }
     ],
-    showAllBtn: true
+    showAllBtn: true,
+    load: false
   }),
   computed: {
     ...mapGetters({
@@ -55,20 +39,23 @@ export default {
         const d = ('0' + date.getDate()).slice(-2)
         const h = ('0' + date.getHours()).slice(-2)
         const i = ('0' + date.getMinutes()).slice(-2)
+        const s = ('0' + date.getSeconds()).slice(-2)
         transactions.push({
-          date: `${y}-${m}-${d} ${h}:${i} (${getAgo(date)})`,
-          title: element.title,
-          price: element.price
+          date: `${y}-${m}-${d} ${h}:${i}:${s}`,
+          price_m: element.price < 0 ? element.price : null,
+          price_p: element.price >= 0 ? element.price : null,
+          title: element.title
         })
       })
       return transactions
     }
   },
-  fetch({ store, params }) {
-    if (store.getters['auth/status']) {
-      store.dispatch('transactions/bindTransactions', 5)
-      store.dispatch('bank/bindBank')
+  fetch({ store, redirect }) {
+    if (!store.getters['auth/status']) {
+      return redirect('/')
     }
+    store.dispatch('transactions/bindTransactions', 5)
+    store.dispatch('bank/bindBank')
   },
   methods: {
     showAll() {

@@ -44,12 +44,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/pwa',
-    'vue-sweetalert2/nuxt'
-  ],
+  modules: ['@nuxtjs/pwa', 'vue-sweetalert2/nuxt'],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
@@ -60,7 +55,7 @@ export default {
    ** https://github.com/nuxt-community/vuetify-module
    */
   vuetify: {
-    // customVariables: ['~/assets/variables.scss'],
+    customVariables: ['~/assets/variables.scss'],
     theme: {
       dark: false,
       themes: {

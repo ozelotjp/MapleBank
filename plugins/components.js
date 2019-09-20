@@ -1,4 +1,5 @@
 import Vue from 'vue'
-import MemberOnly from '~/components/MemberOnly'
 
-Vue.component('MemberOnly', MemberOnly)
+import Loading from '~/components/Loading'
+
+Vue.component('Loading', Loading)
