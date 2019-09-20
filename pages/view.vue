@@ -42,7 +42,7 @@ export default {
         const s = ('0' + date.getSeconds()).slice(-2)
         transactions.push({
           date: `${y}-${m}-${d} ${h}:${i}:${s}`,
-          price_m: element.price < 0 ? element.price : null,
+          price_m: element.price < 0 ? Math.abs(element.price) : null,
           price_p: element.price >= 0 ? element.price : null,
           title: element.title
         })
