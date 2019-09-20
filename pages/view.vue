@@ -1,14 +1,13 @@
 <template lang="pug">
   MemberOnly
     v-container
-      v-alert(type="info") 現在の残高は 0円 です
-      v-alert(type="error") 現在の残高は 0円 です
-      v-data-table(:headers="headers" :items="getFormatedTransaction" hide-default-footer)
+      v-alert(:type="bank.point >= 0 ? 'info' : 'error'") 現在の残高は {{ bank.point }}円 です
+      v-data-table(:headers="headers" :items="getFormatedTransactions" hide-default-footer)
         template(v-slot:no-data)
           div データを読込中です
         template(v-slot:footer v-if="showAllBtn")
           v-container
-            v-btn.caption(text @click="showAll()") 全件表示させる場合はここをクリック
+            v-btn(small @click="showAll()") 全件表示させる場合はここをクリック
 </template>
 
 <script>
@@ -44,34 +43,36 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      transaction: 'transaction/transaction'
+      transactions: 'transactions/transactions',
+      bank: 'bank/bank'
     }),
-    getFormatedTransaction() {
-      const transaction = []
-      this.transaction.forEach((element) => {
+    getFormatedTransactions() {
+      const transactions = []
+      this.transactions.forEach((element) => {
         const date = element.date.toDate()
         const y = date.getFullYear()
         const m = ('0' + date.getMonth()).slice(-2)
         const d = ('0' + date.getDate()).slice(-2)
         const h = ('0' + date.getHours()).slice(-2)
         const i = ('0' + date.getMinutes()).slice(-2)
-        transaction.push({
+        transactions.push({
           date: `${y}-${m}-${d} ${h}:${i} (${getAgo(date)})`,
           title: element.title,
           price: element.price
         })
       })
-      return transaction
+      return transactions
     }
   },
   fetch({ store, params }) {
     if (store.getters['auth/status']) {
-      store.dispatch('transaction/bindTransaction', 5)
+      store.dispatch('transactions/bindTransactions', 5)
+      store.dispatch('bank/bindBank')
     }
   },
   methods: {
     showAll() {
-      this.$store.dispatch('transaction/bindTransaction', null)
+      this.$store.dispatch('transactions/bindTransactions', null)
       this.showAllBtn = false
     }
   }

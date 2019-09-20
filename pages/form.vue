@@ -4,11 +4,12 @@
       v-row
         v-col(cols="12")
           v-alert(dark dense) 支払ボタン
-          v-btn.mr-2.mb-2(v-for="(item, id) in payment" :key="id" @click="select(item.text, item.price), dialog = true") {{ item.text }}
+          v-btn.mr-2.mb-2(@click="select('クロワッサン', -183), dialog = true") クロワッサン
         v-col(cols="12")
           v-alert(dark dense) 入金ボタン
-          v-btn.mr-2.mb-2(@click="select('クロワッサン', -183), dialog = true") クロワッサン
-          v-btn.mr-2.mb-2(v-for="(item, id) in receipt" :key="id" @click="select('入金', item), dialog = true") {{ item }}円
+          v-btn.mr-2.mb-2(v-for="item in payment" :key="item.id" @click="select(item.text, item.price), dialog = true") {{ item.text }}
+          br
+          v-btn.mr-2.mb-2(v-for="item in receipt" :key="item.id" @click="select('入金', item), dialog = true") {{ item }}円
         v-col(cols="12")
           v-alert(dark dense) その他
           v-btn(@click="select('', 0), dialog = true") 手動で入力
@@ -35,6 +36,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import firebase from '~/plugins/firebase'
+import firestore from '~/plugins/firestore'
 
 export default {
   data: () => ({
@@ -42,15 +45,16 @@ export default {
     price: 0,
     dialog: false,
     payment: [
-      { text: '三ツ矢サイダー', price: -51 },
-      { text: 'コーラ', price: -64 },
-      { text: 'ライフガード', price: -49 }
+      { text: '三ツ矢サイダー', price: 51 },
+      { text: 'コーラ', price: 64 },
+      { text: 'ライフガード', price: 49 }
     ],
     receipt: [1000, 2000, 3000, 4000, 5000]
   }),
   computed: {
     ...mapGetters({
-      transactionRef: 'transaction/transactionRef'
+      transactionsRef: 'transactions/transactionsRef',
+      bankRef: 'bank/bankRef'
     })
   },
   methods: {
@@ -59,17 +63,35 @@ export default {
       this.price = price
     },
     submit() {
-      this.transactionRef.add({
-        title: this.title,
-        price: this.price,
-        date: new Date()
-      })
-      this.$swal({
-        type: 'success',
-        title: 'Success',
-        timer: 1500,
-        showConfirmButton: false
-      })
+      const title = this.title
+      const price = parseInt(this.price)
+      firestore
+        .runTransaction((transaction) => {
+          return transaction.get(this.bankRef).then((bank) => {
+            const newPoint = bank.data().point + price
+            transaction.update(this.bankRef, { point: newPoint })
+          })
+        })
+        .then(() => {
+          this.transactionsRef.add({
+            title,
+            price,
+            date: firebase.firestore.FieldValue.serverTimestamp()
+          })
+          this.$swal({
+            type: 'success',
+            title: 'Success',
+            timer: 1500,
+            showConfirmButton: false
+          })
+        })
+        .catch((error) => {
+          this.$swal({
+            type: 'error',
+            title: 'Error',
+            text: error
+          })
+        })
     }
   }
 }
