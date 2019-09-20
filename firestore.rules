@@ -1,8 +1,20 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write;
+		match /bank/maple {
+    	allow read: if isUser();
+    	allow update: if isUser();
     }
-  }
+    match /transactions/{transactionID} {
+    	allow read: if isUser();
+    	allow create: if isUser();
+    }
+	}
+}
+
+function isUser() {
+	return request.auth.uid in [
+  	'fFbGPKG4YiVPePb7UNo74NqzlGl1' // kansa
+  ]
 }
