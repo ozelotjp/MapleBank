@@ -7,7 +7,7 @@
           div データを読込中です
         template(v-slot:footer v-if="showAllBtn")
           v-container
-            v-btn(small @click="showAll()") 全件表示させる場合はここをクリック
+            v-btn(small) 全件表示は未実装です…
     Loading(v-else)
 </template>
 
@@ -54,14 +54,8 @@ export default {
     if (!store.getters['auth/status']) {
       return redirect('/')
     }
-    store.dispatch('transactions/bindTransactions', 5)
+    store.dispatch('transactions/bindTransactions')
     store.dispatch('bank/bindBank')
-  },
-  methods: {
-    showAll() {
-      this.$store.dispatch('transactions/bindTransactions', null)
-      this.showAllBtn = false
-    }
   }
 }
 </script>

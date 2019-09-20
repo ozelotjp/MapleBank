@@ -8,12 +8,10 @@ export const state = () => ({
 })
 
 export const actions = {
-  bindTransactions: firestoreAction(async ({ bindFirestoreRef }, limit) => {
+  bindTransactions: firestoreAction(async ({ bindFirestoreRef }) => {
     await bindFirestoreRef(
       'transactions',
-      limit
-        ? transactionsRef.orderBy('date', 'desc').limit(limit)
-        : transactionsRef.orderBy('date', 'desc')
+      transactionsRef.orderBy('date', 'desc')
     )
   })
 }
