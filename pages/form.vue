@@ -31,7 +31,7 @@
               v-col
                 v-btn(block @click="dialog = false") キャンセル
               v-col
-                v-btn(block color="primary" @click="dialog = false, submit()") 確定
+                v-btn(block color="primary" @click="dialog = false, submit()") 登録
 </template>
 
 <script>

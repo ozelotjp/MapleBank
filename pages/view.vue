@@ -2,7 +2,7 @@
   v-content
     v-container(v-if="transactions && bank")
       v-alert(:type="bank.point >= 0 ? 'info' : 'error'") 現在の残高は {{ bank.point }}円 です
-      v-data-table(:headers="headers" :items="getFormatedTransactions" hide-default-footer disable-sort)
+      v-data-table(:headers="headers" :items="getFormatedTransactions" :hide-default-header="$vuetify.breakpoint.xsOnly" hide-default-footer disable-sort)
         template(v-slot:no-data)
           div データを読込中です
         template(v-slot:footer v-if="showAllBtn")
