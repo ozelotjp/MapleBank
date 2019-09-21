@@ -15,6 +15,7 @@ service cloud.firestore {
 
 function isUser() {
 	return request.auth.uid in [
-  	'fFbGPKG4YiVPePb7UNo74NqzlGl1' // kansa
+  	'fFbGPKG4YiVPePb7UNo74NqzlGl1', // kansa
+    'laY1gnxSSgTxrFGvXOcrL1Nja3F2'  // maple
   ]
 }
