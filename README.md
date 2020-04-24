@@ -1,6 +1,7 @@
 # maplebank
 
-> My gnarly Nuxt.js project
+このプロジェクトは廃止されました。
+後続のプロジェクトとして [ozelotjp/ShareWallet](https://github.com/ozelotjp/ShareWallet)があります。
 
 ## Build Setup
 
